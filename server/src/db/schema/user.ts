@@ -1,8 +1,13 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { text, pgTable, timestamp } from "drizzle-orm/pg-core";
+import { nanoid } from "../../lib/nano-id";
 
-export const usersTable = pgTable("users", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar({ length: 255 }).notNull(),
-  age: integer().notNull(),
-  email: varchar({ length: 255 }).notNull().unique(),
-});
+export const users = pgTable("user", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  name: text("name"),
+  email: text("email").unique(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
+  password: text("password").notNull(),
+})
